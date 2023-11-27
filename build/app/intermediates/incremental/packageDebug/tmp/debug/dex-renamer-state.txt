@@ -1,0 +1,4 @@
+#Mon Nov 27 14:47:18 CET 2023
+base.0=C\:\\Users\\noahc\\StudioProjects\\FitApp_Epitech\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
