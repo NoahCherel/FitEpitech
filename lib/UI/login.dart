@@ -19,41 +19,48 @@ class _AuthScreenState extends State<AuthScreen> {
 
       try {
         if (_isLogin) {
-          await Auth().signInWithEmailAndPassword(email, password);
+          var login = await Auth().signInWithEmailAndPassword(email, password);
+          if (login != "Signed in") {
+            showTopSnackBar(context, 'Invalid email or password.');
+          } else {
+            Navigator.pushReplacementNamed(context, '/main');
+          }
         } else {
-          await Auth().registerWithEmailAndPassword(email, password);
+          var register = await Auth().registerWithEmailAndPassword(email, password);
+          if (register != "Signed up") {
+            showTopSnackBar(context, 'Invalid email or password.');
+          } else {
+            Navigator.pushReplacementNamed(context, '/main');
+          }
         }
-
-        // Navigate to the main page after successful authentication
-        Navigator.pushReplacementNamed(context, '/main');
       } catch (error) {
-        // Check if the error indicates a registration failure
-        if (!_isLogin && error.toString().contains('email-already-in-use')) {
-          // Show a snackbar with the error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Account already exists with this email.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        } else {
-          // For other errors, you can handle them as needed
-          print('Error: $error');
-        }
+        showTopSnackBar(context, error.toString());
       }
     }
+  }
+
+  void showTopSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+        backgroundColor: Colors.red,
+        dismissDirection: DismissDirection.up,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height - 100,
+            left: 10,
+            right: 10),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('FitTech Pro'),
-        backgroundColor: Colors.blue,
-      ),
       body: Container(
         color: Colors.grey[200],
         padding: const EdgeInsets.all(16.0),
+
         child: Form(
           key: _formKey,
           child: Column(
@@ -110,7 +117,6 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  // Toggle whether we are in login or register mode
                   setState(() {
                     _isLogin = !_isLogin;
                   });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import './UI/login.dart';
+import './UI/welcome.dart';
 import '../auth.dart';
 
 void main() async {
@@ -24,8 +25,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/login',
+      initialRoute: '/welcome',
       routes: {
+        '/welcome': (context) => WelcomeScreen(), // new
         '/login': (context) => AuthScreen(),
         '/main': (context) => MainPage(),
       },
