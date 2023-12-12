@@ -37,4 +37,9 @@ class Auth {
     Future<void> signOut() async {
         await _auth.signOut();
     }
+
+    // This will return the current user
+    User? getCurrentUser() {
+        return _auth.currentUser;
+    }
 }

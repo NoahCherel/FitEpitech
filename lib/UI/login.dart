@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../auth.dart';
 
 class AuthScreen extends StatefulWidget {
+  static const routeName = '/login';
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -30,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
           if (register != "Signed up") {
             showTopSnackBar(context, 'Invalid email or password.');
           } else {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushReplacementNamed(context, '/profile-setup');
           }
         }
       } catch (error) {
