@@ -10,6 +10,7 @@ import 'auth.dart';
 import 'firebase_options.dart';
 import './UI/login.dart';
 import './UI/welcome.dart';
+import './Fitness/calendar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         MainScreen.routeName: (context) => const MainScreen(),
         ProfileScreen.routeName: (context) => const ProfileScreen(),
         ProfileSetupScreen.routeName: (context) => ProfileSetupScreen(),
+        CalendarScreen.routeName: (context) => CalendarScreen(),
       },
     );
   }
@@ -107,6 +109,13 @@ class _MainScreenState extends State<MainScreen> {
             onPressed: () async {
               await Auth().signOut();
               Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+            },
+          ),
+          // Calendar Button
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () {
+              Navigator.pushNamed(context, CalendarScreen.routeName);
             },
           ),
         ],

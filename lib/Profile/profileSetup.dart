@@ -144,4 +144,10 @@ class AddData {
       print("success!");
     });
   }
+
+  getProfileData() {
+    User? user = _auth.currentUser;
+    String uid = user!.uid.toString();
+    return firestoreInstance.collection("users").doc(uid).snapshots();
+  }
 }
