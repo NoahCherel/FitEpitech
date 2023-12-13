@@ -1,30 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitness_app/Profile/profileSetup.dart';
+import 'package:fitness_app/UI/homepage.dart';
 import 'package:flutter/material.dart';
 import '../UI/login.dart';
 import '../auth.dart';
 import '../addData.dart';
+import '../Fitness/calendar.dart';
+import '../UI/welcome.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   static const routeName = '/profile';
 
   const ProfileScreen({Key? key}) : super(key: key);
 
-  Future<void> handleSignOut(BuildContext context) async {
-    try {
-      await Auth().signOut();
-      Navigator.pushReplacementNamed(context, AuthScreen.routeName);
-    } catch (error) {
-      print(error);
-    }
-  }
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  int _selectedIndex = 2; // Profile tab index
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
+        automaticallyImplyLeading: false,
         title: Center(child: Text('Profile', style: TextStyle(fontSize: 24.0, color: Colors.black))),
         actions: [
           IconButton(
@@ -204,6 +207,38 @@ class ProfileScreen extends StatelessWidget {
             return Center(
               child: CircularProgressIndicator(),
             );
+          }
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+
+          // Navigate to the selected page
+          if (_selectedIndex == 0) {
+            Navigator.pushNamed(context, MainScreen.routeName);
+          } else if (_selectedIndex == 1) {
+            Navigator.pushNamed(context, CalendarScreen.routeName);
+          } else if (_selectedIndex == 2) {
+            // Already on the Profile page, no need to navigate
           }
         },
       ),

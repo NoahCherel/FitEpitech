@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../Profile/profile.dart';
+import '../UI/homepage.dart';
+
 class CalendarScreen extends StatefulWidget {
   static const routeName = '/calendar';
 
@@ -26,6 +29,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+  int _selectedIndex = 1;
   List<Event> _events = [];
 
   final TextEditingController _titleController = TextEditingController();
@@ -64,6 +68,38 @@ class _CalendarScreenState extends State<CalendarScreen> {
           // Only show the activities on the selected day
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          // Navigate to the selected page
+          if (_selectedIndex == 0) {
+            Navigator.pushNamed(context, MainScreen.routeName);
+          } else if (_selectedIndex == 1) {
+            Navigator.pushNamed(context, CalendarScreen.routeName);
+          } else if (_selectedIndex == 2) {
+            Navigator.pushNamed(context, ProfileScreen.routeName);
+          }
+        },
+
+      ),
     );
   }
 
@@ -71,13 +107,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.grey[200],
-      title: Center(
-        child: Text(
-          'Calendar',
-          style: TextStyle(fontSize: 24.0, color: Colors.black),
-
-        ),
-      ),
+      title: Center(child: Text('Calendar', style: TextStyle(fontSize: 24.0, color: Colors.black))),
+        automaticallyImplyLeading: false,
     );
   }
 
