@@ -6,6 +6,8 @@ import 'package:sensors/sensors.dart';
 import '../auth.dart';
 import '../UI/login.dart';
 import '../UI/welcome.dart';
+import 'fitnessMetrics.dart';
+import 'calendarWidget.dart';
 
 class MainScreen extends StatefulWidget {
   static const routeName = '/main';
@@ -23,6 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   double milesWalked = 0.0;
   late DateTime startTime;
   int _selectedIndex = 0;
+  List<Event> _events = [];
 
   @override
   void initState() {
@@ -75,50 +78,38 @@ class _MainScreenState extends State<MainScreen> {
           // Calendar Button
         ],
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Welcome to FitTech Pro!',
-              style: TextStyle(fontSize: 24.0),
+            // Use a GridView for the grid layout
+            GridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 20.0,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              childAspectRatio: 1, // Adjust this aspect ratio to change the box size
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: SmallFitnessMetricsWidget(
+                    steps: steps,
+                    caloriesBurned: caloriesBurned,
+                    duration: duration,
+                    milesWalked: milesWalked,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: SmallCalendarWidget(
+                    selectedDay: DateTime.now(),
+                    events: _events.map((event) => event.workoutActivity).toList(),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            Text(
-              'Steps taken:',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '$steps',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Calories burned:',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '$caloriesBurned',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Duration:',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '${duration.inHours}:${(duration.inMinutes % 60).toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Miles walked:',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '$milesWalked',
-              style: TextStyle(fontSize: 24),
-            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -143,7 +134,6 @@ class _MainScreenState extends State<MainScreen> {
           setState(() {
             _selectedIndex = index;
           });
-          // Navigate to the selected page
           if (_selectedIndex == 0) {
             // Home page is already being displayed, no need to navigate
           } else if (_selectedIndex == 1) {
@@ -152,7 +142,6 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.pushNamed(context, ProfileScreen.routeName);
           }
         },
-
       ),
     );
   }

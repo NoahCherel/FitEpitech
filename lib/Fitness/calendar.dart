@@ -14,14 +14,16 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class Event {
-  final String title;
   final DateTime date;
   final int durationInMinutes;
+  final String workoutActivity;
+  final int caloriesBurned;
 
   Event({
-    required this.title,
     required this.date,
     required this.durationInMinutes,
+    required this.workoutActivity,
+    required this.caloriesBurned,
   });
 }
 
@@ -32,8 +34,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   int _selectedIndex = 1;
   List<Event> _events = [];
 
-  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _workoutActivityController = TextEditingController();
+  final TextEditingController _caloriesBurnedController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +52,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
               itemBuilder: (context, index) {
                 final event = _events[index];
                 if (isSameDay(event.date, _selectedDay)) {
-                  return ListTile(
-                    title: Text(event.title),
-                    subtitle: Text('${event.durationInMinutes} minutes'),
+                  return GestureDetector(
+                    onTap: () {
+                      _removeEvent(index);
+                    },
+                    child: ListTile(
+                      title: Text(event.workoutActivity),
+                      subtitle: Text('${event.durationInMinutes} minutes'),
+                      trailing: Text('${event.caloriesBurned} calories'),
+                    ),
                   );
                 }
                 return const SizedBox.shrink();
@@ -138,7 +147,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       eventLoader: (day) {
         return _events
             .where((event) => isSameDay(event.date, day))
-            .map((event) => event.title)
+            .map((event) => event.workoutActivity)
             .toList();
       },
       calendarStyle: const CalendarStyle(
@@ -189,18 +198,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
             'Add an Event',
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 8.0),
           TextFormField(
-            controller: _titleController,
-            decoration: const InputDecoration(labelText: 'Event Title'),
+            controller: _workoutActivityController,
+            decoration: const InputDecoration(labelText: 'Workout Activity'),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 8.0),
           TextFormField(
             controller: _durationController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(labelText: 'Event Duration (minutes)'),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 8.0),
+          TextFormField(
+            controller: _caloriesBurnedController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Calories Burned'),
+          ),
+          SizedBox(height: 8.0),
           ElevatedButton(
             onPressed: _addEvent,
             style: ElevatedButton.styleFrom(
@@ -227,20 +242,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _addEvent() {
-    final title = _titleController.text;
     final duration = int.tryParse(_durationController.text) ?? 0;
+    final workoutActivity = _workoutActivityController.text;
+    final caloriesBurned = int.tryParse(_caloriesBurnedController.text) ?? 0;
 
-    if (title.isNotEmpty && duration > 0) {
+    if (duration > 0 && workoutActivity.isNotEmpty && caloriesBurned > 0) {
       final newEvent = Event(
-        title: title,
         date: _selectedDay,
         durationInMinutes: duration,
+        workoutActivity: workoutActivity,
+        caloriesBurned: caloriesBurned,
       );
       setState(() {
         _events.add(newEvent);
-        _titleController.clear();
         _durationController.clear();
+        _workoutActivityController.clear();
+        _caloriesBurnedController.clear();
       });
+      Navigator.pop(context);
     }
+  }
+
+  void _removeEvent(int index) {
+    setState(() {
+      _events.removeAt(index);
+    });
   }
 }
