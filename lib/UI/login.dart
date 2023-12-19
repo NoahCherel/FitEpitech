@@ -47,13 +47,11 @@ class _AuthScreenState extends State<AuthScreen> {
         backgroundColor: Colors.red,
         dismissDirection: DismissDirection.up,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 100,
-            left: 10,
-            right: 10),
+        margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

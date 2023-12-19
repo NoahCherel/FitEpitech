@@ -27,7 +27,7 @@ class _SmallFitnessMetricsWidgetState extends State<SmallFitnessMetricsWidget> {
       width: 180,
       height: 180,
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
@@ -64,11 +64,11 @@ class _SmallFitnessMetricsWidgetState extends State<SmallFitnessMetricsWidget> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, color: Colors.white),
+          style: TextStyle(fontSize: 14, color: Colors.black),
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ],
     );
